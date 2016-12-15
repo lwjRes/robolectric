@@ -380,7 +380,6 @@ public final class ShadowAssetManager {
     }
     resName = resolvedResName;
 
-    ResourceProvider resourceProvider = ResourceIds.isFrameworkResource(resId) ? RuntimeEnvironment.getSystemResourceProvider() : RuntimeEnvironment.getCompiletimeResourceProvider();
     XmlBlock block = resourceProvider.getXml(resName, RuntimeEnvironment.getQualifiers());
     if (block == null) {
       throw new Resources.NotFoundException(resName.getFullyQualifiedName());

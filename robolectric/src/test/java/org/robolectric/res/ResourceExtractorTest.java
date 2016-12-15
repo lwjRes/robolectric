@@ -18,7 +18,7 @@ public class ResourceExtractorTest {
     ResourceExtractor.populate(systemResources(), resourceIndex1);
     ResourceIndex resourceIndex2 = new ResourceIndex("lib");
     ResourceExtractor.populate(testResources(), resourceIndex2);
-    resourceIndex = new MergedResourceIndex(resourceIndex2, resourceIndex1);
+    resourceIndex = new RoutingResourceIndex(resourceIndex2, resourceIndex1);
   }
 
   @Test
@@ -69,7 +69,7 @@ public class ResourceExtractorTest {
         resourceIndex2);
     ResourceIndex resourceIndex1 = new ResourceIndex("packageName");
     ResourceExtractor.populate(systemResources(), resourceIndex1);
-    resourceIndex = new MergedResourceIndex(overlayResourceIndex, resourceIndex1);
+    resourceIndex = new RoutingResourceIndex(overlayResourceIndex, resourceIndex1);
 
     assertThat(resourceIndex.getResourceId(new ResName("org.robolectric", "string", "in_all_libs"))).isEqualTo(R.string.in_all_libs);
     assertThat(resourceIndex.getResourceId(new ResName("org.robolectric.lib1", "string", "in_all_libs"))).isEqualTo(R.string.in_all_libs);

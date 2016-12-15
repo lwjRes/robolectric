@@ -22,7 +22,7 @@ public class RoutingResourceProvider extends ResourceProvider {
       this.resourceTables.put(resourceTable.getPackageName(), resourceTable);
       resourceIndexes.add(resourceTable.getResourceIndex());
     }
-    resourceIndex = new MergedResourceIndex(resourceIndexes.toArray(new ResourceIndex[resourceIndexes.size()]));
+    resourceIndex = new RoutingResourceIndex(resourceIndexes.toArray(new ResourceIndex[resourceIndexes.size()]));
   }
 
   @Override public TypedResource getValue(@NotNull ResName resName, String qualifiers) {

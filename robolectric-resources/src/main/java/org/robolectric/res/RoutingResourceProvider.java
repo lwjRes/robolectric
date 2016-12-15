@@ -35,8 +35,8 @@ public class RoutingResourceProvider extends ResourceProvider {
   }
 
   @Override
-  public InputStream getRawValue(ResName resName) {
-    return pickFor(resName).getRawValue(resName);
+  public InputStream getRawValue(ResName resName, String qualifiers) {
+    return pickFor(resName).getRawValue(resName, qualifiers);
   }
 
   @Override

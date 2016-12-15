@@ -92,7 +92,7 @@ public class PackageResourceProvider extends XResourceProvider {
   }
 
   @Override
-  public InputStream getRawValue(ResName resName) {
+  public InputStream getRawValue(ResName resName, String qualifiers) {
     return null;
   }
 

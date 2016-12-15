@@ -3,32 +3,39 @@ package org.robolectric.res;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RoutingResourceIndex extends ResourceIndex {
+public class RoutingResourceIndex extends PackageResourceIndex {
 
-  private Map<String, ResourceIndex> resourceIndexes = new HashMap<>();
+  private Map<String, ResourceIndex> packageNameToIndex = new HashMap<>();
+  private Map<Integer, ResourceIndex> packageIndentifierToIndex = new HashMap<>();
 
-  public RoutingResourceIndex(ResourceIndex... subIndexes) {
+  public RoutingResourceIndex(PackageResourceIndex... subIndexes) {
     super("");
 
-    for (ResourceIndex subIndex : subIndexes) {
-      resourceIndexes.put(subIndex.getPackageName(), subIndex);
+    for (PackageResourceIndex subIndex : subIndexes) {
+      packageNameToIndex.put(subIndex.getPackageName(), subIndex);
+      packageIndentifierToIndex.put(subIndex.getPackageIdentifier(), subIndex);
     }
   }
 
   @Override
   public Integer getResourceId(ResName resName) {
-    ResourceIndex resourceIndex = resourceIndexes.get(resName.packageName);
+    ResourceIndex resourceIndex = packageNameToIndex.get(resName.packageName);
     if (resourceIndex == null) {
       // This occurs at present because the XML contains "xmlns:android" elements, we should probably ignore these in the XmlParserImpl
       System.out.println("Resource not found, unknown package: " + resName.packageName);
-      return -1;
+      return 0;
     }
     return resourceIndex.getResourceId(resName);
   }
 
   @Override
   public ResName getResName(int resourceId) {
-    String packageName = ResourceIds.isFrameworkResource(resourceId) ? "android" : "org.robolectric";
-    return resourceIndexes.get(packageName).getResName(resourceId);
+    int packageIdentifier = ResourceIds.getPackageIdentifier(resourceId);
+    ResourceIndex resourceIndex = packageIndentifierToIndex.get(packageIdentifier);
+    if (resourceIndex == null) {
+      return null;
+    }
+
+    return resourceIndex.getResName(resourceId);
   }
 }

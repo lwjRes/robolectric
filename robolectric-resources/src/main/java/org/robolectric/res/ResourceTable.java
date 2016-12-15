@@ -10,10 +10,10 @@ public class ResourceTable {
   final ResBunch data = new ResBunch();
   final ResBundle xmlDocuments = new ResBundle();
   final ResBundle rawResources = new ResBundle();
-  private ResourceIndex resourceIndex;
+  private PackageResourceIndex resourceIndex;
   private Object packageName;
 
-  public ResourceTable(ResourceIndex resourceIndex) {
+  public ResourceTable(PackageResourceIndex resourceIndex) {
     this.resourceIndex = resourceIndex;
   }
 
@@ -21,7 +21,7 @@ public class ResourceTable {
     return resourceIndex.getPackageName();
   }
 
-  public ResourceIndex getResourceIndex() {
+  public PackageResourceIndex getResourceIndex() {
     return resourceIndex;
   }
 

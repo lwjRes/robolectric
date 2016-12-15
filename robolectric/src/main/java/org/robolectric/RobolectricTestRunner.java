@@ -40,15 +40,7 @@ import org.robolectric.internal.dependency.LocalDependencyResolver;
 import org.robolectric.internal.dependency.MavenDependencyResolver;
 import org.robolectric.internal.dependency.PropertiesDependencyResolver;
 import org.robolectric.manifest.AndroidManifest;
-import org.robolectric.res.Fs;
-import org.robolectric.res.FsFile;
-import org.robolectric.res.ResourceExtractor;
-import org.robolectric.res.ResourceIndex;
-import org.robolectric.res.ResourceMerger;
-import org.robolectric.res.ResourceProvider;
-import org.robolectric.res.ResourcePath;
-import org.robolectric.res.ResourceTable;
-import org.robolectric.res.RoutingResourceProvider;
+import org.robolectric.res.*;
 import org.robolectric.util.Logger;
 import org.robolectric.util.ReflectionHelpers;
 
@@ -224,7 +216,7 @@ public class RobolectricTestRunner extends BlockJUnit4ClassRunner {
   private static ResourceTable getCompiletimeSdkResourceTable() {
     if (compiletimeSdkResourceTable == null) {
       String androidPackage = "android";
-      ResourceIndex resourceIndex = new ResourceIndex(androidPackage);
+      PackageResourceIndex resourceIndex = new PackageResourceIndex(androidPackage);
       ResourceExtractor.populate(new ResourcePath(android.R.class, androidPackage, null, null), resourceIndex);
       compiletimeSdkResourceTable = new ResourceTable(resourceIndex);
     }

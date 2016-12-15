@@ -10,19 +10,19 @@ import java.util.Set;
 import org.robolectric.res.builder.XmlBlock;
 
 public class RoutingResourceProvider extends ResourceProvider {
-  public static final ResourceTable EMPTY_RESOURCE_TABLE = new ResourceTable(new ResourceIndex(""));
+  public static final ResourceTable EMPTY_RESOURCE_TABLE = new ResourceTable(new PackageResourceIndex(""));
   private final Map<String, ResourceTable> resourceTables;
   private final ResourceIndex resourceIndex;
 
   public RoutingResourceProvider(ResourceTable... resourceTables) {
     this.resourceTables = new HashMap<>();
 
-    Set<ResourceIndex> resourceIndexes = new HashSet<>();
+    Set<PackageResourceIndex> resourceIndexes = new HashSet<>();
     for (ResourceTable resourceTable : resourceTables) {
       this.resourceTables.put(resourceTable.getPackageName(), resourceTable);
       resourceIndexes.add(resourceTable.getResourceIndex());
     }
-    resourceIndex = new RoutingResourceIndex(resourceIndexes.toArray(new ResourceIndex[resourceIndexes.size()]));
+    resourceIndex = new RoutingResourceIndex(resourceIndexes.toArray(new PackageResourceIndex[resourceIndexes.size()]));
   }
 
   @Override public TypedResource getValue(@NotNull ResName resName, String qualifiers) {

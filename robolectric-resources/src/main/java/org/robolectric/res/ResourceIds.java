@@ -7,4 +7,8 @@ public class ResourceIds {
   public static boolean isFrameworkResource(int resId) {
     return ((resId >>> 24) == 0x1);
   }
+
+  public static int getPackageIdentifier(int resId) {
+    return (resId >>> 24);
+  }
 }

@@ -16,4 +16,10 @@ public class ResourceIdsTest {
     assertThat(ResourceIds.isFrameworkResource(0x01000000)).isTrue();
     assertThat(ResourceIds.isFrameworkResource(0x7F000000)).isFalse();
   }
+
+  @Test
+  public void testGetPackageIdentifier() {
+    assertThat(ResourceIds.getPackageIdentifier(0x01000000)).isEqualTo(0x01);
+    assertThat(ResourceIds.getPackageIdentifier(0x7F000000)).isEqualTo(0x7F);
+  }
 }

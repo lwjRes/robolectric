@@ -4,16 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.robolectric.internal.bytecode.ShadowInvalidator;
 import org.robolectric.internal.dependency.DependencyResolver;
 import org.robolectric.internal.bytecode.ShadowMap;
-import org.robolectric.internal.bytecode.ShadowWrangler;
-import org.robolectric.res.Fs;
-import org.robolectric.res.ResourceExtractor;
-import org.robolectric.res.ResourceIndex;
-import org.robolectric.res.ResourceParser;
-import org.robolectric.res.ResourcePath;
-import org.robolectric.res.ResourceTable;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.robolectric.res.*;
 
 public class SdkEnvironment {
   private final SdkConfig sdkConfig;
@@ -31,7 +22,7 @@ public class SdkEnvironment {
   public synchronized ResourceTable getSystemResourceTable(DependencyResolver dependencyResolver) {
     if (systemResourceTable == null) {
       ResourcePath resourcePath = createRuntimeSdkResourcePath(dependencyResolver);
-      ResourceIndex resourceIndex = new ResourceIndex(resourcePath.getPackageName());
+      PackageResourceIndex resourceIndex = new PackageResourceIndex(resourcePath.getPackageName());
       ResourceExtractor.populate(resourcePath, resourceIndex);
       systemResourceTable = new ResourceTable(resourceIndex);
       ResourceParser.load(resourcePath, systemResourceTable);

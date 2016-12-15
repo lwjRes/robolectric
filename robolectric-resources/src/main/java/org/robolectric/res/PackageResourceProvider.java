@@ -14,7 +14,7 @@ public class PackageResourceProvider extends XResourceProvider {
   }
 
   private static ResourceIndex createResourceIndex(ResourcePath resourcePath) {
-    ResourceIndex resourceIndex = new ResourceIndex(resourcePath.getPackageName());
+    PackageResourceIndex resourceIndex = new PackageResourceIndex(resourcePath.getPackageName());
     ResourceExtractor.populate(resourcePath, resourceIndex);
     return resourceIndex;
   }

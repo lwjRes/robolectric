@@ -13,12 +13,16 @@ public class ResourceExtractorTest {
 
   @Before
   public void setUp() throws Exception {
-    resourceIndex = ResourceMerger.buildResourceTable("app", testResources(), asList(systemResources(), testResources())).getResourceIndex();
-    ResourceIndex resourceIndex1 = new ResourceIndex("app");
-    ResourceExtractor.populate(systemResources(), resourceIndex1);
-    ResourceIndex resourceIndex2 = new ResourceIndex("lib");
-    ResourceExtractor.populate(testResources(), resourceIndex2);
-    resourceIndex = new RoutingResourceIndex(resourceIndex2, resourceIndex1);
+    PackageResourceIndex systemResourceIndex = new PackageResourceIndex("android");
+
+    PackageResourceIndex appResourceIndex = new PackageResourceIndex("org.robolectric");
+    ResourceExtractor.populate(lib3Resources(), appResourceIndex);
+    ResourceExtractor.populate(lib2Resources(), appResourceIndex);
+    ResourceExtractor.populate(lib1Resources(), appResourceIndex);
+    ResourceExtractor.populate(testResources(), appResourceIndex);
+
+    ResourceExtractor.populate(systemResources(), systemResourceIndex);
+    resourceIndex = new RoutingResourceIndex(systemResourceIndex, appResourceIndex);
   }
 
   @Test
@@ -52,28 +56,10 @@ public class ResourceExtractorTest {
   }
 
   @Test
-  public void shouldResolveEquivalentResNames() throws Exception {
-    ResourceIndex resourceIndex2 = new ResourceIndex("packageName");
-    ResourceExtractor.populate(lib3Resources(), resourceIndex2);
-    ResourceIndex resourceIndex3 = new ResourceIndex("packageName");
-    ResourceExtractor.populate(lib2Resources(), resourceIndex3);
-    ResourceIndex resourceIndex4 = new ResourceIndex("packageName");
-    ResourceExtractor.populate(lib1Resources(), resourceIndex4);
-    ResourceIndex resourceIndex5 = new ResourceIndex("packageName");
-    ResourceExtractor.populate(testResources(), resourceIndex5);
-    OverlayResourceIndex overlayResourceIndex = new OverlayResourceIndex(
-        "org.robolectric",
-        resourceIndex5,
-        resourceIndex4,
-        resourceIndex3,
-        resourceIndex2);
-    ResourceIndex resourceIndex1 = new ResourceIndex("packageName");
-    ResourceExtractor.populate(systemResources(), resourceIndex1);
-    resourceIndex = new RoutingResourceIndex(overlayResourceIndex, resourceIndex1);
-
+  public void shouldNotResolveLibraryResourceName() throws Exception {
     assertThat(resourceIndex.getResourceId(new ResName("org.robolectric", "string", "in_all_libs"))).isEqualTo(R.string.in_all_libs);
-    assertThat(resourceIndex.getResourceId(new ResName("org.robolectric.lib1", "string", "in_all_libs"))).isEqualTo(R.string.in_all_libs);
-    assertThat(resourceIndex.getResourceId(new ResName("org.robolectric.lib2", "string", "in_all_libs"))).isEqualTo(R.string.in_all_libs);
-    assertThat(resourceIndex.getResourceId(new ResName("org.robolectric.lib3", "string", "in_all_libs"))).isEqualTo(R.string.in_all_libs);
+    assertThat(resourceIndex.getResourceId(new ResName("org.robolectric.lib1", "string", "in_all_libs"))).isEqualTo(0);
+    assertThat(resourceIndex.getResourceId(new ResName("org.robolectric.lib2", "string", "in_all_libs"))).isEqualTo(0);
+    assertThat(resourceIndex.getResourceId(new ResName("org.robolectric.lib3", "string", "in_all_libs"))).isEqualTo(0);
   }
 }

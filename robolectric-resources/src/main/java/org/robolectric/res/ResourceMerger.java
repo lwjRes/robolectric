@@ -19,7 +19,7 @@ public class ResourceMerger {
 
   @NotNull
   public static ResourceTable buildResourceTable(String packageName, ResourcePath appResourcePath, List<ResourcePath> allResourcePaths) {
-    ResourceIndex resourceIndex = new ResourceIndex(packageName);
+    PackageResourceIndex resourceIndex = new PackageResourceIndex(packageName);
     ResourceTable resourceTable = new ResourceTable(resourceIndex);
     ResourceExtractor.populate(appResourcePath, resourceIndex);
 

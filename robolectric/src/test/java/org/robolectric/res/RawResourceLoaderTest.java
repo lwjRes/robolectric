@@ -13,12 +13,12 @@ import static org.robolectric.util.TestUtil.testResources;
 @RunWith(JUnit4.class)
 public class RawResourceLoaderTest {
 
-  private ResourceIndex resourceIndex;
+  private PackageResourceIndex resourceIndex;
   private ResBundle rawResourceFiles;
 
   @Before
   public void setUp() throws Exception {
-    resourceIndex = new ResourceIndex("packageName");
+    resourceIndex = new PackageResourceIndex("packageName");
     ResourceExtractor.populate(testResources(), resourceIndex);
     rawResourceFiles = new ResBundle();
     RawResourceLoader rawResourceLoader = new RawResourceLoader(TEST_RESOURCE_PATH);

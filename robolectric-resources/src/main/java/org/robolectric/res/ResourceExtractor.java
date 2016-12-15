@@ -6,17 +6,16 @@ import java.lang.reflect.Modifier;
 public class ResourceExtractor {
 
   public static void populate(ResourcePath resourcePath, PackageResourceIndex resourceIndex) {
-    String packageName = resourcePath.getPackageName();
     if (resourcePath.getRClass() != null) {
-      populate(resourcePath.getRClass(), packageName, resourceIndex);
+      populate(resourcePath.getRClass(), resourceIndex);
     }
 
     if (resourcePath.getInternalRClass() != null) {
-      populate(resourcePath.getInternalRClass(), packageName, resourceIndex);
+      populate(resourcePath.getInternalRClass(), resourceIndex);
     }
   }
 
-  private static void populate(Class<?> rClass, String packageName, PackageResourceIndex resourceIndex) {
+  private static void populate(Class<?> rClass, PackageResourceIndex resourceIndex) {
     for (Class innerClass : rClass.getClasses()) {
       for (Field field : innerClass.getDeclaredFields()) {
         if (field.getType().equals(Integer.TYPE) && Modifier.isStatic(field.getModifiers())) {
@@ -30,7 +29,7 @@ public class ResourceExtractor {
 
           if (!section.equals("styleable")) {
             String fieldName = field.getName();
-            resourceIndex.addResource(id, new ResName(packageName, section, fieldName));
+            resourceIndex.addResource(id, section, fieldName);
           }
         }
       }

@@ -47,12 +47,12 @@ public class PackageResourceIndex implements ResourceIndex {
     return packageName;
   }
 
-  public int getPackageIdentifier() {
+  int getPackageIdentifier() {
     return packageIdentifier;
   }
 
-  public void addResource(int id, ResName resName) {
-    resName = resName.withPackageName(packageName);
+  void addResource(int id, String type, String name) {
+    ResName resName = new ResName(packageName, type, name);
     int resIdPackageIdentifier = ResourceIds.getPackageIdentifier(id);
     if (getPackageIdentifier() == 0) {
       this.packageIdentifier = resIdPackageIdentifier;

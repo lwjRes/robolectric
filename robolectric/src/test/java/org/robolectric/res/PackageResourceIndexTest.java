@@ -12,7 +12,7 @@ public class PackageResourceIndexTest {
   @Test
   public void getPackageName_shouldReturnPackageNameOfItsResources() {
     PackageResourceIndex resourceIndex = new PackageResourceIndex("myPackage");
-    resourceIndex.addResource(0x02999999, new ResName("myPackage", "type", "name"));
+    resourceIndex.addResource(0x02999999, "type", "name");
 
     assertThat(resourceIndex.getPackageName()).isEqualTo("myPackage");
   }
@@ -20,7 +20,7 @@ public class PackageResourceIndexTest {
   @Test
   public void getPackageIdentifier_shouldReturnPackageIdentiferOfItsResources() {
     PackageResourceIndex resourceIndex = new PackageResourceIndex("myPackage");
-    resourceIndex.addResource(0x02999999, new ResName("myPackage", "type", "name"));
+    resourceIndex.addResource(0x02999999, "type", "name");
 
     assertThat(resourceIndex.getPackageIdentifier()).isEqualTo(0x02);
   }
@@ -28,7 +28,7 @@ public class PackageResourceIndexTest {
   @Test(expected = IllegalArgumentException.class)
   public void addResource_shouldPreventMixedPackageIdentifiers() {
     PackageResourceIndex resourceIndex = new PackageResourceIndex("myPackage");
-    resourceIndex.addResource(0x02999999, new ResName("myPackage", "type", "name"));
-    resourceIndex.addResource(0x03999999, new ResName("myPackage", "type", "name"));
+    resourceIndex.addResource(0x02999999, "type", "name");
+    resourceIndex.addResource(0x03999999, "type", "name");
   }
 }

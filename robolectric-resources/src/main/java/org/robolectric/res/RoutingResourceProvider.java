@@ -10,7 +10,7 @@ import java.util.Set;
 import org.robolectric.res.builder.XmlBlock;
 
 public class RoutingResourceProvider extends ResourceProvider {
-  public static final ResourceTable EMPTY_RESOURCE_TABLE = new ResourceTable(new PackageResourceIndex(""));
+  private static final ResourceTable EMPTY_RESOURCE_TABLE = new ResourceTable(new PackageResourceIndex(""));
   private final Map<String, ResourceTable> resourceTables;
   private final ResourceIndex resourceIndex;
 
@@ -44,20 +44,11 @@ public class RoutingResourceProvider extends ResourceProvider {
     return resourceIndex;
   }
 
-  @Override public boolean providesFor(String namespace) {
-    return whichProvidesFor(namespace) != null;
-  }
-
   @Override
   public void receive(Visitor visitor) {
     for (ResourceTable resourceTable : resourceTables.values()) {
       resourceTable.data.receive(visitor);
     }
-  }
-
-  private ResourceTable pickFor(int id) {
-    ResName resName = resourceIndex.getResName(id);
-    return pickFor(resName);
   }
 
   private ResourceTable pickFor(ResName resName) {

@@ -39,8 +39,4 @@ public class EmptyResourceProvider extends XResourceProvider {
     return null;
   }
 
-  @Override
-  public boolean providesFor(String namespace) {
-    return packageName.equals(namespace);
-  }
 }

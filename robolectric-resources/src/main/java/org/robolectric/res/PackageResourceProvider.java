@@ -96,7 +96,4 @@ public class PackageResourceProvider extends XResourceProvider {
     return null;
   }
 
-  @Override public boolean providesFor(String namespace) {
-    return resourcePath.getPackageName().equals(namespace);
-  }
 }

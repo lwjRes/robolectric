@@ -33,8 +33,6 @@ public abstract class ResourceProvider {
 
   public abstract ResourceIndex getResourceIndex();
 
-  public abstract boolean providesFor(String namespace);
-
   @NotNull
   public List<TypedResource> grep(String regex) {
       return grep(Pattern.compile(regex));

@@ -3,14 +3,12 @@ package org.robolectric.res;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RoutingResourceIndex extends PackageResourceIndex {
+public class RoutingResourceIndex implements ResourceIndex {
 
   private Map<String, ResourceIndex> packageNameToIndex = new HashMap<>();
   private Map<Integer, ResourceIndex> packageIndentifierToIndex = new HashMap<>();
 
   public RoutingResourceIndex(PackageResourceIndex... subIndexes) {
-    super("");
-
     for (PackageResourceIndex subIndex : subIndexes) {
       packageNameToIndex.put(subIndex.getPackageName(), subIndex);
       packageIndentifierToIndex.put(subIndex.getPackageIdentifier(), subIndex);

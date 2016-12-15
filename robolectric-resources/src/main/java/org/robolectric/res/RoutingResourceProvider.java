@@ -79,6 +79,6 @@ public class RoutingResourceProvider extends ResourceProvider {
 
   @Override
   public String toString() {
-    return "RoutingResourceProvider{" + resourceTables + "}";
+    return resourceTables.keySet().toString();
   }
 }

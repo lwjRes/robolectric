@@ -764,12 +764,8 @@ public final class ShadowAssetManager {
   @NotNull private ResName getResName(int id) {
     ResName resName = resourceProvider.getResourceIndex().getResName(id);
     if (resName == null) {
-      ArrayList<String> strings = new ArrayList<>();
-      strings.add("some package");// todo
-      List<String> packages = strings; //new ArrayList<>(resourceProvider.getResourceIndex(),);
-      Collections.sort(packages);
       throw new Resources.NotFoundException("Unable to find resource ID #0x" + Integer.toHexString(id)
-          + " in packages " + packages);
+          + " in packages " + resourceProvider);
     }
     return resName;
   }

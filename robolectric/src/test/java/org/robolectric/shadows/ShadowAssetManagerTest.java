@@ -206,14 +206,14 @@ public class ShadowAssetManagerTest {
 
   @Test
   public void getResourceIdentifier_shouldReturnValueFromRClass() throws Exception {
-    assertThat(shadowOf(assetManager).getResourceIdentifier("idInRClassAndXml", "id", "org.robolectric"))
-        .isEqualTo(R.id.idInRClassAndXml);
-    assertThat(shadowOf(assetManager).getResourceIdentifier("id/idInRClassAndXml", null, "org.robolectric"))
-        .isEqualTo(R.id.idInRClassAndXml);
-    assertThat(shadowOf(assetManager).getResourceIdentifier("org.robolectric:idInRClassAndXml", "id", null))
-        .isEqualTo(R.id.idInRClassAndXml);
-    assertThat(shadowOf(assetManager).getResourceIdentifier("org.robolectric:id/idInRClassAndXml", "other", "other"))
-        .isEqualTo(R.id.idInRClassAndXml);
+    assertThat(shadowOf(assetManager).getResourceIdentifier("idIDeclaredInXml", "id", "org.robolectric"))
+        .isEqualTo(R.id.idIDeclaredInXml);
+    assertThat(shadowOf(assetManager).getResourceIdentifier("id/idIDeclaredInXml", null, "org.robolectric"))
+        .isEqualTo(R.id.idIDeclaredInXml);
+    assertThat(shadowOf(assetManager).getResourceIdentifier("org.robolectric:idIDeclaredInXml", "id", null))
+        .isEqualTo(R.id.idIDeclaredInXml);
+    assertThat(shadowOf(assetManager).getResourceIdentifier("org.robolectric:id/idIDeclaredInXml", "other", "other"))
+        .isEqualTo(R.id.idIDeclaredInXml);
   }
 
   @Test
@@ -241,15 +241,6 @@ public class ShadowAssetManagerTest {
   public void whenCalledForIdWithNameNotInRClassOrXml_getResourceIdentifier_shouldReturnZero() throws Exception {
     assertThat(shadowOf(assetManager).getResourceIdentifier("org.robolectric:id/idThatDoesntExistAnywhere", "other", "other"))
         .isEqualTo(0);
-  }
-
-  @Test
-  public void whenIdIsAbsentInRClassButPresentInXml_getResourceIdentifier_shouldReturnGeneratedId() throws Exception {
-    int id = shadowOf(assetManager).getResourceIdentifier("idNotInRClass", "id", "org.robolectric");
-    assertThat(id).isGreaterThan(0);
-    assertThat(shadowOf(assetManager).getResourceIdentifier("id/idNotInRClass", null, "org.robolectric")).isEqualTo(id);
-    assertThat(shadowOf(assetManager).getResourceIdentifier("org.robolectric:idNotInRClass", "id", null)).isEqualTo(id);
-    assertThat(shadowOf(assetManager).getResourceIdentifier("org.robolectric:id/idNotInRClass", "other", "other")).isEqualTo(id);
   }
 
   @Test

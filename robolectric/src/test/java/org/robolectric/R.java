@@ -85,7 +85,7 @@ public final class R {
     public static final int action_search = 0x7f01003c;
 
     public static final int idNotInXml = 0x7f01003d;
-    public static final int idInRClassAndXml = 0x7f01003e;
+    public static final int idIDeclaredInXml = 0x7f01003e;
     public static int lib_button = 0x7f01003f;
     public static int lib3_button = 0x7f010040;
   }

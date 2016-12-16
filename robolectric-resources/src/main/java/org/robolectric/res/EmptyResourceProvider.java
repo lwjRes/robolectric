@@ -8,20 +8,21 @@ import java.io.InputStream;
 /**
  * A resource loader with no resources.
  */
-public class EmptyResourceProvider extends XResourceProvider {
-  private String packageName;
+public class EmptyResourceProvider extends ResourceProvider {
 
-  public EmptyResourceProvider() {
-    this(null, null);
-  }
+  private final ResourceIndex resourceIndex;
 
-  public EmptyResourceProvider(String packageName, ResourceIndex resourceIndex) {
-    super(resourceIndex);
-    this.packageName = packageName;
+  @Override
+  public ResourceIndex getResourceIndex() {
+    return resourceIndex;
   }
 
   @Override
-  void doInitialize() {
+  public void receive(Visitor visitor) {
+  }
+
+  public EmptyResourceProvider(ResourceIndex resourceIndex) {
+    this.resourceIndex = resourceIndex;
   }
 
   @Override

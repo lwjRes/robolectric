@@ -34,19 +34,7 @@ public class ResBunch {
     return size;
   }
 
-  public void makeImmutable() {
-    for (ResBundle bundle : types.values()) {
-      bundle.makeImmutable();
-    }
-  }
-
-  public void mergeLibraryStyle(ResBunch fromResBundle, String packageName) {
-    for (Map.Entry<String, ResBundle> entry : fromResBundle.types.entrySet()) {
-      getBundle(entry.getKey()).mergeLibraryStyle(entry.getValue(), packageName);
-    }
-  }
-
-  public void receive(ResourceProvider.Visitor visitor) {
+  void receive(ResourceProvider.Visitor visitor) {
     for (ResBundle resBundle : types.values()) {
       resBundle.receive(visitor);
     }

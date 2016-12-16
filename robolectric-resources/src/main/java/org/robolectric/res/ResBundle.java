@@ -10,11 +10,10 @@ import java.util.Map;
 
 public class ResBundle {
   private final ResMap valuesMap = new ResMap();
-  private String overrideNamespace;
 
   public void put(String attrType, String name, TypedResource value) {
     XmlLoader.XmlContext xmlContext = value.getXmlContext();
-    ResName resName = new ResName(maybeOverride(xmlContext.packageName), attrType, name);
+    ResName resName = new ResName(xmlContext.packageName, attrType, name);
     List<TypedResource> values = valuesMap.find(resName);
     values.add(value);
 
@@ -28,11 +27,11 @@ public class ResBundle {
   }
 
   public TypedResource get(ResName resName, String qualifiers) {
-    List<TypedResource> typedResources = valuesMap.find(maybeOverride(resName));
+    List<TypedResource> typedResources = valuesMap.find(resName);
     return pick(typedResources, qualifiers);
   }
 
-  public static TypedResource pick(List<TypedResource> typedResources, String qualifiersStr) {
+  static TypedResource pick(List<TypedResource> typedResources, String qualifiersStr) {
     final int count = typedResources.size();
     if (count == 0) return null;
 
@@ -80,27 +79,6 @@ public class ResBundle {
 
   public int size() {
     return valuesMap.size();
-  }
-
-  public void makeImmutable() {
-    valuesMap.makeImmutable();
-  }
-
-  public void overrideNamespace(String overrideNamespace) {
-    this.overrideNamespace = overrideNamespace;
-    if (size() > 0) throw new RuntimeException();
-  }
-
-  String maybeOverride(String namespace) {
-    return overrideNamespace == null ? namespace : overrideNamespace;
-  }
-
-  ResName maybeOverride(ResName resName) {
-    return overrideNamespace == null ? resName : new ResName(overrideNamespace, resName.type, resName.name);
-  }
-
-  public void mergeLibraryStyle(ResBundle fromResBundle, String packageName) {
-    valuesMap.merge(packageName, fromResBundle.valuesMap);
   }
 
   public void receive(ResourceProvider.Visitor visitor) {
@@ -159,7 +137,6 @@ public class ResBundle {
 
   private static class ResMap {
     private final Map<ResName, List<TypedResource>> map = new HashMap<>();
-    private boolean immutable;
 
     public List<TypedResource> find(ResName resName) {
       List<TypedResource> values = map.get(resName);
@@ -167,24 +144,8 @@ public class ResBundle {
       return values;
     }
 
-    private void merge(String packageName, ResMap sourceMap) {
-      if (immutable) {
-        throw new IllegalStateException("immutable!");
-      }
-
-      for (Map.Entry<ResName, List<TypedResource>> entry : sourceMap.map.entrySet()) {
-        ResName resName = entry.getKey().withPackageName(packageName);
-        find(resName).addAll(entry.getValue());
-      }
-    }
-
     public int size() {
       return map.size();
     }
-
-    public void makeImmutable() {
-      immutable = true;
-    }
   }
-
 }

@@ -11,7 +11,6 @@ public class ResourceTable {
   final ResBundle xmlDocuments = new ResBundle();
   final ResBundle rawResources = new ResBundle();
   private PackageResourceIndex resourceIndex;
-  private Object packageName;
 
   public ResourceTable(PackageResourceIndex resourceIndex) {
     this.resourceIndex = resourceIndex;
@@ -29,12 +28,12 @@ public class ResourceTable {
     return data.get(resName, qualifiers);
   }
 
-  public XmlBlock getXml(ResName resName, String qualifiers) {
+  XmlBlock getXml(ResName resName, String qualifiers) {
     TypedResource typedResource = xmlDocuments.get(resName, qualifiers);
     return typedResource == null ? null : (XmlBlock) typedResource.getData();
   }
 
-  public InputStream getRawValue(ResName resName, String qualifiers) {
+  InputStream getRawValue(ResName resName, String qualifiers) {
     TypedResource typedResource = rawResources.get(resName, qualifiers);
     FsFile file = typedResource == null ? null : (FsFile) typedResource.getData();
     try {

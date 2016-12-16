@@ -3,9 +3,9 @@ package org.robolectric.res;
 import org.robolectric.util.Logger;
 
 public class ResourceParser {
-  public static void load(ResourcePath resourcePath, ResourceTable resourceTable) {
+  public static void load(String packageName, ResourcePath resourcePath, ResourceTable resourceTable) {
     if (!resourcePath.hasResources()) {
-      Logger.debug("No resources for %s", resourcePath.getPackageName());
+      Logger.debug("No resources for %s", packageName);
       return;
     }
 
@@ -13,9 +13,9 @@ public class ResourceParser {
     ResBundle xmlDocuments = resourceTable.xmlDocuments;
     ResBundle rawResources = resourceTable.rawResources;
 
-    Logger.debug("Loading resources for %s from %s...", resourcePath.getPackageName(), resourcePath.getResourceBase());
+    Logger.debug("Loading resources for %s from %s...", packageName, resourcePath.getResourceBase());
 
-    DocumentLoader documentLoader = new DocumentLoader(resourcePath);
+    DocumentLoader documentLoader = new DocumentLoader(packageName, resourcePath);
 
     try {
       documentLoader.load("values",
@@ -54,8 +54,8 @@ public class ResourceParser {
       throw new RuntimeException(e);
     }
 
-    new DrawableResourceLoader(data).findDrawableResources(resourcePath);
-    new RawResourceLoader(resourcePath).loadTo(rawResources);
+    new DrawableResourceLoader(packageName, data).findDrawableResources(resourcePath);
+    new RawResourceLoader(packageName, resourcePath).loadTo(rawResources);
   }
 
 }

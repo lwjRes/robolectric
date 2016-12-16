@@ -22,9 +22,9 @@ public class ResourceMerger {
     ResourceExtractor.populate(appResourcePath, resourceIndex);
 
     for (ResourcePath resourcePath : allResourcePaths) {
-      ResourceParser.load(resourcePath, resourceTable);
+      ResourceParser.load(packageName, resourcePath, resourceTable);
     }
-    ResourceParser.load(appResourcePath, resourceTable);
+    ResourceParser.load(packageName, appResourcePath, resourceTable);
     return resourceTable;
   }
 

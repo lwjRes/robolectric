@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.robolectric.R;
 import org.robolectric.res.*;
-import org.robolectric.util.TestUtil;
 import org.w3c.dom.Document;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -59,7 +58,7 @@ public class XmlResourceParserImplTest {
   public void setUp() throws Exception {
     ResBundle resBundle = new ResBundle();
     XmlBlockLoader xmlBlockLoader = new XmlBlockLoader(resBundle, "xml");
-    new DocumentLoader(testResources()).load("xml", xmlBlockLoader);
+    new DocumentLoader(R.class.getPackage().getName(), testResources()).load("xml", xmlBlockLoader);
 
     ResName resName = new ResName(TEST_PACKAGE, "xml", "preferences");
     XmlBlock xmlBlock = (XmlBlock) resBundle.get(resName, "").getData();
@@ -105,7 +104,7 @@ public class XmlResourceParserImplTest {
       Document document = documentBuilder.parse(
           new ByteArrayInputStream(xmlValue.getBytes()));
 
-      parser = new XmlResourceParserImpl(document, "file", TestUtil.testResources().getPackageName(),
+      parser = new XmlResourceParserImpl(document, "file", R.class.getPackage().getName(),
           TEST_PACKAGE, resourceProvider);
       // Navigate to the root element
       parseUntilNext(XmlResourceParser.START_TAG);

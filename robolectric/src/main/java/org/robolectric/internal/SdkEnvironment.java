@@ -12,6 +12,7 @@ public class SdkEnvironment {
   private final ShadowInvalidator shadowInvalidator;
   private ShadowMap shadowMap = ShadowMap.EMPTY;
   private ResourceTable systemResourceTable;
+  public static final String ANDROID_PACKAGE_NAME = android.R.class.getPackage().getName();
 
   public SdkEnvironment(SdkConfig sdkConfig, ClassLoader robolectricClassLoader) {
     this.sdkConfig = sdkConfig;
@@ -22,10 +23,10 @@ public class SdkEnvironment {
   public synchronized ResourceTable getSystemResourceTable(DependencyResolver dependencyResolver) {
     if (systemResourceTable == null) {
       ResourcePath resourcePath = createRuntimeSdkResourcePath(dependencyResolver);
-      PackageResourceIndex resourceIndex = new PackageResourceIndex(resourcePath.getPackageName());
+      PackageResourceIndex resourceIndex = new PackageResourceIndex(ANDROID_PACKAGE_NAME);
       ResourceExtractor.populate(resourcePath, resourceIndex);
       systemResourceTable = new ResourceTable(resourceIndex);
-      ResourceParser.load(resourcePath, systemResourceTable);
+      ResourceParser.load(ANDROID_PACKAGE_NAME, resourcePath, systemResourceTable);
     }
     return systemResourceTable;
   }
@@ -37,7 +38,6 @@ public class SdkEnvironment {
       Class<?> androidRClass = getRobolectricClassLoader().loadClass("android.R");
       Class<?> androidInternalRClass = getRobolectricClassLoader().loadClass("com.android.internal.R");
       return new ResourcePath(androidRClass,
-          androidRClass.getPackage().getName(),
           systemResFs.join("res"), systemResFs.join("assets"),
           androidInternalRClass);
     } catch (ClassNotFoundException e) {

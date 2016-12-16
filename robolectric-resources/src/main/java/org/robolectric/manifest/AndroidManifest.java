@@ -546,7 +546,7 @@ public class AndroidManifest {
   }
 
   public ResourcePath getResourcePath() {
-    return new ResourcePath(getRClass(), getPackageName(), resDirectory, assetsDirectory);
+    return new ResourcePath(getRClass(), resDirectory, assetsDirectory);
   }
 
   public List<ResourcePath> getIncludedResourcePaths() {

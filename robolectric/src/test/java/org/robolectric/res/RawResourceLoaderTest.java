@@ -21,7 +21,7 @@ public class RawResourceLoaderTest {
     resourceIndex = new PackageResourceIndex("packageName");
     ResourceExtractor.populate(testResources(), resourceIndex);
     rawResourceFiles = new ResBundle();
-    RawResourceLoader rawResourceLoader = new RawResourceLoader(TEST_RESOURCE_PATH);
+    RawResourceLoader rawResourceLoader = new RawResourceLoader("packageName", TEST_RESOURCE_PATH);
     rawResourceLoader.loadTo(rawResourceFiles);
   }
 

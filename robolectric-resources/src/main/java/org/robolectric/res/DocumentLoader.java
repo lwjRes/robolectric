@@ -1,14 +1,8 @@
 package org.robolectric.res;
 
-import com.ximpleware.EOFException;
-import com.ximpleware.EncodingException;
-import com.ximpleware.EntityException;
-import com.ximpleware.ParseException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 
 public class DocumentLoader {
   private static final FsFile.Filter ENDS_WITH_XML = new FsFile.Filter() {
@@ -21,9 +15,9 @@ public class DocumentLoader {
   private final String packageName;
   private final VTDGen vtdGen;
 
-  public DocumentLoader(ResourcePath resourcePath) {
+  public DocumentLoader(String packageName, ResourcePath resourcePath) {
     this.resourceBase = resourcePath.getResourceBase();
-    this.packageName = resourcePath.getPackageName();
+    this.packageName = packageName;
     vtdGen = new VTDGen();
   }
 

@@ -62,12 +62,11 @@ public class XmlResourceParserImplTest {
 
     ResName resName = new ResName(TEST_PACKAGE, "xml", "preferences");
     XmlBlock xmlBlock = (XmlBlock) resBundle.get(resName, "").getData();
-    PackageResourceIndex resourceIndex1 = new PackageResourceIndex("packageName");
-    ResourceExtractor.populate(testResources(), resourceIndex1);
-    ResourceIndex resourceIndex = resourceIndex1;
+    PackageResourceIndex resourceIndex = new PackageResourceIndex("org.robolectric");
+    ResourceExtractor.populate(testResources(), resourceIndex);
     resourceProvider = mock(ResourceProvider.class);
     when(resourceProvider.getResourceIndex()).thenReturn(resourceIndex);
-    parser = (XmlResourceParserImpl) new XmlResourceParserImpl(xmlBlock.getDocument(), xmlBlock.getFilename(), xmlBlock.getPackageName(),
+    parser = new XmlResourceParserImpl(xmlBlock.getDocument(), xmlBlock.getFilename(), xmlBlock.getPackageName(),
         TEST_PACKAGE, resourceProvider);
   }
 

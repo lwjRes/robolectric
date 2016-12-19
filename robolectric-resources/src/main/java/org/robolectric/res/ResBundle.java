@@ -59,12 +59,11 @@ public class ResBundle {
     private final Map<ResName, Map<String, TypedResource>> map = new HashMap<>();
 
     public TypedResource pick(ResName resName, String qualifiersStr) {
-      Collection<TypedResource> values = map.get(resName).values();
-      TreeSet<TypedResource> typedResources = new TreeSet<>(new QualifierSort());
-      typedResources.addAll(values);
+      Map<String, TypedResource> values = map.get(resName);
+      if (values == null || values.size() == 0) return null;
 
-      final int count = typedResources.size();
-      if (count == 0) return null;
+      TreeSet<TypedResource> typedResources = new TreeSet<>(new QualifierSort());
+      typedResources.addAll(values.values());
 
       // This should really follow the android algorithm specified at:
       // http://developer.android.com/guide/topics/resources/providing-resources.html#BestMatch

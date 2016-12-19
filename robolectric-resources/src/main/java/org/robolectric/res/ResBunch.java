@@ -26,14 +26,6 @@ public class ResBunch {
     return bundle.get(resName, qualifiers);
   }
 
-  public int size() {
-    int size = 0;
-    for (ResBundle bundle : types.values()) {
-      size += bundle.size();
-    }
-    return size;
-  }
-
   void receive(ResourceProvider.Visitor visitor) {
     for (ResBundle resBundle : types.values()) {
       resBundle.receive(visitor);

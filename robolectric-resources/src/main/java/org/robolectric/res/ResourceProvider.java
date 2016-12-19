@@ -43,10 +43,10 @@ public abstract class ResourceProvider {
     final ArrayList<TypedResource> matches = new ArrayList<>();
     receive(new Visitor<TypedResource>() {
       @Override
-      public void visit(ResName resName, List<TypedResource> typedResources) {
+      public void visit(ResName resName, Iterable<TypedResource> items) {
         boolean match = pattern.matcher(resName.getFullyQualifiedName()).find();
         if (!match && resName.type.equals("style")) {
-          for (TypedResource typedResource : typedResources) {
+          for (TypedResource typedResource : items) {
             TypedResource<StyleData> style = (TypedResource<StyleData>) typedResource;
             if (style.getData().grep(pattern)) {
               match = true;
@@ -56,7 +56,7 @@ public abstract class ResourceProvider {
         }
 
         if (match) {
-          for (TypedResource typedResource : typedResources) {
+          for (TypedResource typedResource : items) {
             matches.add(typedResource);
           }
         }
@@ -68,6 +68,6 @@ public abstract class ResourceProvider {
   public abstract void receive(Visitor visitor);
 
   public interface Visitor <T> {
-    void visit(ResName key, List<T> value);
+    void visit(ResName key, Iterable<T> items);
   }
 }

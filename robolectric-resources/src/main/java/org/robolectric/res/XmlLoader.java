@@ -49,14 +49,18 @@ public abstract class XmlLoader {
   protected abstract void processResourceXml(FsFile xmlFile, XpathResourceXmlLoader.XmlNode xmlNode, XmlContext xmlContext);
 
   public static class XmlContext {
-    public static final Pattern DIR_QUALIFIER_PATTERN = Pattern.compile("^[^-]+(?:-(.*))?$");
+    private static final Pattern DIR_QUALIFIER_PATTERN = Pattern.compile("^[^-]+(?:-(.*))?$");
 
-    public final String packageName;
+    private final String packageName;
     private final FsFile xmlFile;
 
     public XmlContext(String packageName, FsFile xmlFile) {
       this.packageName = packageName;
       this.xmlFile = xmlFile;
+    }
+
+    public String getPackageName() {
+      return packageName;
     }
 
     public String getDirPrefix() {

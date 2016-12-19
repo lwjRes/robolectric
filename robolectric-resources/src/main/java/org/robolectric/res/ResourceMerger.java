@@ -6,13 +6,19 @@ import org.robolectric.manifest.AndroidManifest;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ResourceMerger {
+public class  ResourceMerger {
   @NotNull
   public static ResourceTable buildResourceTable(AndroidManifest appManifest) {
     List<ResourcePath> allResourcePaths = new LinkedList<>();
-    addTransitiveResourcePaths(appManifest.getLibraryManifests(), allResourcePaths);
-    allResourcePaths.add(appManifest.getResourcePath());
+    addTransitiveResourcePaths(appManifest, allResourcePaths);
     return buildResourceTable(appManifest.getPackageName(), appManifest.getResourcePath(), allResourcePaths);
+  }
+
+  private static void addTransitiveResourcePaths(AndroidManifest manifest, List<ResourcePath> resourcePaths) {
+    resourcePaths.add(manifest.getResourcePath());
+    for (AndroidManifest libraryManifest : manifest.getLibraryManifests()) {
+      addTransitiveResourcePaths(libraryManifest, resourcePaths);
+    }
   }
 
   @NotNull
@@ -26,14 +32,5 @@ public class ResourceMerger {
     }
     ResourceParser.load(packageName, appResourcePath, resourceTable);
     return resourceTable;
-  }
-
-  private static void addTransitiveResourcePaths(List<AndroidManifest> manifests, List<ResourcePath> resourcePaths) {
-    for (AndroidManifest manifest : manifests) {
-      if (manifest.getLibraryManifests().size() != 0) {
-        addTransitiveResourcePaths(manifest.getLibraryManifests(), resourcePaths);
-      }
-      resourcePaths.add(manifest.getResourcePath());
-    }
   }
 }

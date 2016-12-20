@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 public class PackageResourceIndex implements ResourceIndex {
   private static final Logger LOGGER = Logger.getLogger(ResourceExtractor.class.getName());
 
-  protected final Map<ResName, Integer> resourceNameToId = new HashMap<>();
-  protected final Map<Integer, ResName> resourceIdToResName = new HashMap<>();
+  private final Map<ResName, Integer> resourceNameToId = new HashMap<>();
+  private final Map<Integer, ResName> resourceIdToResName = new HashMap<>();
 
   private Integer maxUsedInt = null;
   private Integer generatedIdStart = null;

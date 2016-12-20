@@ -16,12 +16,13 @@ public class ResourceExtractorTest {
     PackageResourceIndex systemResourceIndex = new PackageResourceIndex("android");
 
     PackageResourceIndex appResourceIndex = new PackageResourceIndex("org.robolectric");
-    ResourceExtractor.populate(lib3Resources(), appResourceIndex);
-    ResourceExtractor.populate(lib2Resources(), appResourceIndex);
-    ResourceExtractor.populate(lib1Resources(), appResourceIndex);
-    ResourceExtractor.populate(testResources(), appResourceIndex);
+    ResourceExtractor.populate(appResourceIndex,
+        lib3Resources().getRClass(),
+        lib2Resources().getRClass(),
+        lib1Resources().getRClass(),
+        testResources().getRClass());
 
-    ResourceExtractor.populate(systemResources(), systemResourceIndex);
+    ResourceExtractor.populate(systemResourceIndex, systemResources().getRClass(), systemResources().getInternalRClass());
     resourceIndex = new RoutingResourceIndex(systemResourceIndex, appResourceIndex);
   }
 

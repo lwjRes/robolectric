@@ -24,7 +24,7 @@ public class SdkEnvironment {
     if (systemResourceTable == null) {
       ResourcePath resourcePath = createRuntimeSdkResourcePath(dependencyResolver);
       PackageResourceIndex resourceIndex = new PackageResourceIndex(ANDROID_PACKAGE_NAME);
-      ResourceExtractor.populate(resourcePath, resourceIndex);
+      ResourceExtractor.populate(resourceIndex, resourcePath.getRClass(), resourcePath.getInternalRClass());
       systemResourceTable = new ResourceTable(resourceIndex);
       ResourceParser.load(ANDROID_PACKAGE_NAME, resourcePath, systemResourceTable);
     }

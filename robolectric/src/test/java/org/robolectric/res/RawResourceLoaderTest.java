@@ -19,7 +19,7 @@ public class RawResourceLoaderTest {
   @Before
   public void setUp() throws Exception {
     resourceIndex = new PackageResourceIndex("packageName");
-    ResourceExtractor.populate(testResources(), resourceIndex);
+    ResourceExtractor.populate(resourceIndex, testResources().getRClass());
     rawResourceFiles = new ResBundle();
     RawResourceLoader rawResourceLoader = new RawResourceLoader("packageName", TEST_RESOURCE_PATH);
     rawResourceLoader.loadTo(rawResourceFiles);

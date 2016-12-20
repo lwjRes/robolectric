@@ -217,7 +217,7 @@ public class RobolectricTestRunner extends BlockJUnit4ClassRunner {
     if (compiletimeSdkResourceTable == null) {
       String androidPackage = "android";
       PackageResourceIndex resourceIndex = new PackageResourceIndex(androidPackage);
-      ResourceExtractor.populate(new ResourcePath(android.R.class, null, null), resourceIndex);
+      ResourceExtractor.populate(resourceIndex, android.R.class);
       compiletimeSdkResourceTable = new ResourceTable(resourceIndex);
     }
     return compiletimeSdkResourceTable;

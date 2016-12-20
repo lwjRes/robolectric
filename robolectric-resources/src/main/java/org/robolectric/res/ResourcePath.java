@@ -26,7 +26,7 @@ public class ResourcePath {
   }
 
   public boolean hasResources() {
-    return getResourceBase() != null;
+    return getResourceBase() != null && getResourceBase().exists();
   }
 
   public FsFile getAssetsDir() {

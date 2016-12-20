@@ -385,6 +385,8 @@ public final class ShadowAssetManager {
       throw new Resources.NotFoundException(resName.getFullyQualifiedName());
     }
 
+    ResourceProvider resourceProvider = ResourceIds.isFrameworkResource(resId) ? RuntimeEnvironment.getSystemResourceProvider() : RuntimeEnvironment.getCompiletimeResourceProvider();
+
     return getXmlResourceParser(resourceProvider, block, resName.packageName);
   }
 

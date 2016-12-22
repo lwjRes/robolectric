@@ -32,7 +32,7 @@ public class  ResourceMerger {
     for (ResourcePath resourcePath : allResourcePaths) {
       if (resourcePath.getRClass() != null) {
         resourceRemapper.remapRClass(false, resourcePath.getRClass());
-        ResourceExtractor.populate(resourceIndex, appResourcePath.getRClass());
+        ResourceExtractor.populate(resourceIndex, resourcePath.getRClass());
       }
     }
 

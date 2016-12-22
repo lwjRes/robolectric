@@ -1,5 +1,8 @@
 package org.robolectric.res;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,8 +11,7 @@ import java.util.logging.Logger;
 public class PackageResourceIndex implements ResourceIndex {
   private static final Logger LOGGER = Logger.getLogger(ResourceExtractor.class.getName());
 
-  private final Map<ResName, Integer> resourceNameToId = new HashMap<>();
-  private final Map<Integer, ResName> resourceIdToResName = new HashMap<>();
+  private final BiMap<Integer, ResName> resourceTable = HashBiMap.create();
 
   private Integer maxUsedInt = null;
   private Integer generatedIdStart = null;
@@ -22,15 +24,14 @@ public class PackageResourceIndex implements ResourceIndex {
 
   @Override
   public synchronized Integer getResourceId(ResName resName) {
-    Integer id = resourceNameToId.get(resName);
+    Integer id = resourceTable.inverse().get(resName);
     if (id == null && ("android".equals(resName.packageName) || "".equals(resName.packageName))) {
       if (maxUsedInt == null) {
-        maxUsedInt = resourceIdToResName.isEmpty() ? 0 : Collections.max(resourceIdToResName.keySet());
+        maxUsedInt = resourceTable.isEmpty() ? 0 : Collections.max(resourceTable.keySet());
         generatedIdStart = maxUsedInt;
       }
       id = ++maxUsedInt;
-      resourceNameToId.put(resName, id);
-      resourceIdToResName.put(id, resName);
+      resourceTable.put(id, resName);
       LOGGER.fine("no id mapping found for " + resName.getFullyQualifiedName() + "; assigning ID #0x" + Integer.toHexString(id));
     }
     if (id == null) return 0;
@@ -40,7 +41,7 @@ public class PackageResourceIndex implements ResourceIndex {
 
   @Override
   public synchronized ResName getResName(int resourceId) {
-    return resourceIdToResName.get(resourceId);
+    return resourceTable.get(resourceId);
   }
 
   public String getPackageName() {
@@ -60,7 +61,9 @@ public class PackageResourceIndex implements ResourceIndex {
       throw new IllegalArgumentException("Attempted to add resId " + resIdPackageIdentifier + " to PackageResourceIndex with packageIdentifier " + getPackageIdentifier());
     }
 
-    resourceNameToId.put(resName, id);
-    resourceIdToResName.put(id, resName);
+    ResName existingEntry = resourceTable.put(id, resName);
+    if (existingEntry != null && !existingEntry.equals(resName)) {
+      throw new IllegalArgumentException("ResId " + Integer.toHexString(id) + " mapped to both " + resName + " and " + existingEntry);
+    }
   }
 }

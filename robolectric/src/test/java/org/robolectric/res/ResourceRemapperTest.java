@@ -1,98 +1,46 @@
 package org.robolectric.res;
 
 import org.junit.Test;
-import org.robolectric.util.Join;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
-import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ResourceRemapperTest {
 
-  private ResourceRemapper resourceRemapper = new ResourceRemapper();
+  private ResourceRemapper remapper = new ResourceRemapper();
+
+  @Test(expected = IllegalArgumentException.class)
+  public void forbidFinalRClasses() {
+    remapper.remapRClass(false, FinalRClass.class);
+  }
 
   @Test
-  public void shouldRemapNonFinalIntsInRClasses() throws Exception {
-    resetInitialState();
+  public void testRemap() {
+    remapper.remapRClass(true, org.robolectric.R.class);
+    remapper.remapRClass(false, org.robolectric.lib1.R.class);
+    remapper.remapRClass(false, org.robolectric.lib2.R.class);
+    remapper.remapRClass(false, org.robolectric.lib3.R.class);
 
-    resourceRemapper.remapRClass(android.R.class);
-    resourceRemapper.remapRClass(org.robolectric.lib1.R.class);
-    resourceRemapper.remapRClass(org.robolectric.lib2.R.class);
-    resourceRemapper.remapRClass(org.robolectric.lib3.R.class);
+    // Resource identifiers that are common across libraries should be remapped to the same value.
+    assertThat(org.robolectric.R.string.in_all_libs).isEqualTo(org.robolectric.lib1.R.string.in_all_libs);
+    assertThat(org.robolectric.R.string.in_all_libs).isEqualTo(org.robolectric.lib2.R.string.in_all_libs);
+    assertThat(org.robolectric.R.string.in_all_libs).isEqualTo(org.robolectric.lib3.R.string.in_all_libs);
 
-    assertUnique(
-        org.robolectric.lib1.R.id.lib_button,
-        org.robolectric.lib2.R.id.lib_button,
-        org.robolectric.lib3.R.id.lib_button);
+    // Resource identifiers that clash across two libraries should be remapped to different values.
+    assertThat(org.robolectric.lib1.R.id.lib1_button)
+        .isNotEqualTo(org.robolectric.lib2.R.id.lib2_button);
 
-    assertUnique(
-        org.robolectric.lib1.R.id.lib1_button,
-        org.robolectric.lib2.R.id.lib2_button,
-        org.robolectric.lib3.R.id.lib3_button);
-
-    assertUnique(
-        org.robolectric.lib1.R.attr.offsetX,
-        org.robolectric.lib2.R.attr.offsetX,
-        org.robolectric.lib3.R.attr.offsetX);
-
-    assertUnique(
-        org.robolectric.lib1.R.attr.offsetY,
-        org.robolectric.lib2.R.attr.offsetY,
-        org.robolectric.lib3.R.attr.offsetY);
-
-    assertEquals(asIntList(org.robolectric.lib1.R.styleable.Image),
-        asList(org.robolectric.lib1.R.attr.offsetX, org.robolectric.lib1.R.attr.offsetY));
-
-    assertEquals(asIntList(org.robolectric.lib2.R.styleable.Image),
-        asList(org.robolectric.lib2.R.attr.offsetX, org.robolectric.lib2.R.attr.offsetY));
-
-    assertEquals(asIntList(org.robolectric.lib3.R.styleable.Image),
-        asList(org.robolectric.lib3.R.attr.offsetX, org.robolectric.lib3.R.attr.offsetY));
-
-    assertEquals(1, org.robolectric.lib1.R.styleable.one);
-    assertEquals(2, org.robolectric.lib1.R.styleable.two);
+    // Styleable arrays of values should be updated to match the remapped values.
+    assertThat(org.robolectric.R.styleable.SomeStyleable).containsExactly(org.robolectric.lib1.R.styleable.SomeStyleable);
+    assertThat(org.robolectric.R.styleable.SomeStyleable).containsExactly(org.robolectric.lib2.R.styleable.SomeStyleable);
+    assertThat(org.robolectric.R.styleable.SomeStyleable).containsExactly(org.robolectric.lib3.R.styleable.SomeStyleable);
+    assertThat(org.robolectric.R.styleable.SomeStyleable).containsExactly(org.robolectric.R.attr.offsetX, org.robolectric.R.attr.offsetY);
   }
 
-  private void assertUnique(int... values) {
-    HashSet<Integer> integers = new HashSet<>();
-    for (int value : values) {
-      if (!integers.add(value)) {
-        fail(Join.join(", ", asIntList(values)) + " contained " + value + " twice");
-      }
+  public static final class FinalRClass {
+    public static final class string {
+      public static final int a_final_value = 0x7f020001;
+      public static final int another_final_value = 0x7f020002;
     }
   }
 
-  private void resetInitialState() {
-    org.robolectric.lib1.R.id.lib_button = 0x7f010001;
-    org.robolectric.lib2.R.id.lib_button = 0x7f010001;
-    org.robolectric.lib3.R.id.lib_button = 0x7f010001;
-
-    org.robolectric.lib1.R.id.lib1_button = 0x7f010002;
-    org.robolectric.lib2.R.id.lib2_button = 0x7f010002;
-    org.robolectric.lib3.R.id.lib3_button = 0x7f010002;
-
-    org.robolectric.lib1.R.styleable.Image = new int[] {0x7f010070, 0x7f010071};
-    org.robolectric.lib2.R.styleable.Image = new int[] {0x7f010070, 0x7f010071};
-    org.robolectric.lib3.R.styleable.Image = new int[] {0x7f010070, 0x7f010071};
-
-    org.robolectric.lib1.R.attr.offsetX = 0x7f010070;
-    org.robolectric.lib2.R.attr.offsetX = 0x7f010070;
-    org.robolectric.lib3.R.attr.offsetX = 0x7f010070;
-
-    org.robolectric.lib1.R.attr.offsetY = 0x7f010071;
-    org.robolectric.lib2.R.attr.offsetY = 0x7f010071;
-    org.robolectric.lib3.R.attr.offsetY = 0x7f010071;
-  }
-
-  private List<Integer> asIntList(int[] ints) {
-    ArrayList<Integer> list = new ArrayList<>();
-    for (int anInt : ints) {
-      list.add(anInt);
-    }
-    return list;
-  }
 }

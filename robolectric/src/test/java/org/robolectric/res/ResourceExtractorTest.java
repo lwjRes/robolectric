@@ -13,6 +13,12 @@ public class ResourceExtractorTest {
 
   @Before
   public void setUp() throws Exception {
+    ResourceRemapper resourceRemapper = new ResourceRemapper();
+    resourceRemapper.remapRClass(true, testResources().getRClass());
+    resourceRemapper.remapRClass(false, lib1Resources().getRClass());
+    resourceRemapper.remapRClass(false, lib2Resources().getRClass());
+    resourceRemapper.remapRClass(false, lib3Resources().getRClass());
+
     PackageResourceIndex systemResourceIndex = new PackageResourceIndex("android");
 
     PackageResourceIndex appResourceIndex = new PackageResourceIndex("org.robolectric");

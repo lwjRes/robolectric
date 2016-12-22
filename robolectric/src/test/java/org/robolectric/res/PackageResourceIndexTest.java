@@ -31,4 +31,18 @@ public class PackageResourceIndexTest {
     resourceIndex.addResource(0x02999999, "type", "name");
     resourceIndex.addResource(0x03999999, "type", "name");
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldForbidIdClashes() {
+    PackageResourceIndex resourceIndex = new PackageResourceIndex("myPackage");
+    resourceIndex.addResource(0x02888888, "type", "name");
+    resourceIndex.addResource(0x02999999, "type", "name");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void shouldForbidDuplicateNames() {
+    PackageResourceIndex resourceIndex = new PackageResourceIndex("myPackage");
+    resourceIndex.addResource(0x02999999, "type", "name");
+    resourceIndex.addResource(0x02999999, "type", "anotherName");
+  }
 }

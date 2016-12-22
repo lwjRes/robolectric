@@ -125,6 +125,7 @@ public final class R {
     public static final int space = 0x7f02011f;
     public static final int say_it_with_item = 0x7f020120;
     public static final int test_menu_2 = 0x7f020121;
+    public static final int also_in_all_libs = 0x7f020122;
   }
 
   public static final class plurals {
@@ -298,6 +299,11 @@ public final class R {
   }
 
   public static final class styleable {
+
+    public static final int[] SomeStyleable = new int[]{attr.offsetX, attr.offsetY};
+    public static int SomeStyleable_attr_1 = 0;
+    public static int SomeStyleable_attr_2 = 1;
+
     public static final int[] CustomView = {
         attr.itemType,
         attr.scrollBars,
@@ -324,7 +330,7 @@ public final class R {
         attr.animalStyle,
         attr.typeface,
     };
-    
+
     public static final int AnotherTheme_buttonStyle = 0;
     public static final int AnotherTheme_logoWidth = 1;
     public static final int AnotherTheme_logoHeight = 2;

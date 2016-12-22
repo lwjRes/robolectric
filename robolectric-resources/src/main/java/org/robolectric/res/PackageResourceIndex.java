@@ -44,6 +44,11 @@ public class PackageResourceIndex implements ResourceIndex {
     return resourceTable.get(resourceId);
   }
 
+  @Override
+  public void dump() {
+    System.out.println(resourceTable);
+  }
+
   public String getPackageName() {
     return packageName;
   }

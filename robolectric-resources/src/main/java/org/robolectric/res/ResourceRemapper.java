@@ -1,5 +1,6 @@
 package org.robolectric.res;
 
+import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import java.lang.reflect.Field;
@@ -11,7 +12,7 @@ import static android.R.attr.offset;
 
 public class ResourceRemapper {
 
-  private Map<String, Integer> resIds = HashBiMap.create();
+  private BiMap<String, Integer> resIds = HashBiMap.create();
   private ResourceIdGenerator resourceIdGenerator = new ResourceIdGenerator(0x7F);
 
   void remapRClass(boolean allowFinal, Class<?> rClass) {
@@ -34,6 +35,7 @@ public class ResourceRemapper {
   private void reconcileResourceIds(boolean allowFinal, Class<?> rClass) {
     // Collect all the local attribute id -> name mappings. These are used when processing the stylables to look up
     // the reassigned values.
+    System.out.println("Reconciling: " + rClass);
     Map<Integer, String> localAttributeIds = new HashMap<>();
     for (Class<?> aClass : rClass.getClasses()) {
       if (aClass.getSimpleName().equals("attr")) {
@@ -60,10 +62,13 @@ public class ResourceRemapper {
             Integer value = resIds.get(resourceName);
             if (value != null) {
               field.setAccessible(true);
+              System.out.println("Reassigning cached value for: " + resourceName + "from: " + Integer.toHexString(field.getInt(null)) + " to: " + Integer.toHexString(value));
               field.setInt(null, value);
             } else if (resIds.containsValue(field.getInt(null))) {
               int remappedValue = resourceIdGenerator.generate(resourceType, field.getName());
+              System.out.println("Found resource clash for: " + resourceName + " id: " + field.getInt(null) + " already assigned to : " + resIds.inverse().get(field.getInt(null)) + " assigning new value: " + remappedValue);
               field.setInt(null, remappedValue);
+              resIds.put(resourceName, remappedValue);
             } else {
               resourceIdGenerator.record(field.getInt(null), resourceType, field.getName());
               resIds.put(resourceName, field.getInt(null));

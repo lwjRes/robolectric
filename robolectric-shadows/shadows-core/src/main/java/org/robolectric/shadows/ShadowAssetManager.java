@@ -766,6 +766,7 @@ public final class ShadowAssetManager {
   @NotNull private ResName getResName(int id) {
     ResName resName = resourceProvider.getResourceIndex().getResName(id);
     if (resName == null) {
+      resourceProvider.getResourceIndex().dump();
       throw new Resources.NotFoundException("Unable to find resource ID #0x" + Integer.toHexString(id)
           + " in packages " + resourceProvider);
     }
